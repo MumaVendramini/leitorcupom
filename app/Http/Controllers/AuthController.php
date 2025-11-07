@@ -101,7 +101,14 @@ class AuthController extends Controller
     // Logout
     public function logout(Request $request)
     {
-        Auth::logout();
+        // Logout seguro para múltiplos guards
+        if (Auth::guard('facilitador')->check()) {
+            Auth::guard('facilitador')->logout();
+        }
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
+        }
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Facilitador;
 use App\Models\Usuario;
-use App\Models\NotaFiscal;
+use App\Models\CupomFiscal;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -63,20 +63,24 @@ class DemoSeeder extends Seeder
         echo "  - ana@usuario.com (senha: password)\n";
         echo "  - carlos@usuario.com (senha: password)\n\n";
 
-        // Criar Notas Fiscais de exemplo
-        $notasData = [
+        // Criar Cupons Fiscais de exemplo (antes eram Notas)
+        $cuponsData = [
             [
                 'usuario_id' => $usuario1->id,
                 'chave_acesso' => '35250212345678000123550010000001231234567890',
                 'cnpj' => '12345678000123',
                 'data_emissao' => now()->subDays(5),
                 'valor' => 150.00,
-                'cidade' => 'São Paulo',
+                'uf' => 'SP',
                 'ano' => 2025,
                 'mes' => 1,
-                'modelo' => '55',
+                'modelo' => '65',
                 'numero_nf' => '123',
                 'serie' => '1',
+                'codigo_num' => null,
+                'dv' => null,
+                'sat' => null,
+                'qr_conteudo' => null,
             ],
             [
                 'usuario_id' => $usuario1->id,
@@ -84,12 +88,16 @@ class DemoSeeder extends Seeder
                 'cnpj' => '98765432000198',
                 'data_emissao' => now()->subDays(3),
                 'valor' => 89.90,
-                'cidade' => 'São Paulo',
+                'uf' => 'SP',
                 'ano' => 2025,
                 'mes' => 1,
-                'modelo' => '55',
+                'modelo' => '65',
                 'numero_nf' => '124',
                 'serie' => '1',
+                'codigo_num' => null,
+                'dv' => null,
+                'sat' => null,
+                'qr_conteudo' => null,
             ],
             [
                 'usuario_id' => $usuario2->id,
@@ -97,12 +105,16 @@ class DemoSeeder extends Seeder
                 'cnpj' => '11222333000144',
                 'data_emissao' => now()->subDays(2),
                 'valor' => 250.50,
-                'cidade' => 'Rio de Janeiro',
+                'uf' => 'RJ',
                 'ano' => 2025,
                 'mes' => 1,
-                'modelo' => '55',
+                'modelo' => '65',
                 'numero_nf' => '125',
                 'serie' => '2',
+                'codigo_num' => null,
+                'dv' => null,
+                'sat' => null,
+                'qr_conteudo' => null,
             ],
             [
                 'usuario_id' => $usuario3->id,
@@ -110,20 +122,24 @@ class DemoSeeder extends Seeder
                 'cnpj' => '55666777000155',
                 'data_emissao' => now()->subDays(1),
                 'valor' => 320.00,
-                'cidade' => 'Belo Horizonte',
+                'uf' => 'MG',
                 'ano' => 2025,
                 'mes' => 1,
-                'modelo' => '55',
+                'modelo' => '65',
                 'numero_nf' => '126',
                 'serie' => '1',
+                'codigo_num' => null,
+                'dv' => null,
+                'sat' => null,
+                'qr_conteudo' => null,
             ],
         ];
 
-        foreach ($notasData as $notaData) {
-            NotaFiscal::create($notaData);
+        foreach ($cuponsData as $cupomData) {
+            CupomFiscal::create($cupomData);
         }
 
-        echo "✓ Notas fiscais de exemplo criadas\n\n";
+        echo "✓ Cupons fiscais de exemplo criados\n\n";
         echo "===========================================\n";
         echo "Dados de teste criados com sucesso!\n";
         echo "===========================================\n";

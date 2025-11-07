@@ -27,15 +27,19 @@
             <div class="rounded-md shadow-sm -space-y-px">
                 <div>
                     <label for="usuario-email" class="sr-only">Email</label>
-                    <input id="usuario-email" name="email" type="email" required 
+                    <input id="usuario-email" name="email" type="email" required value="pedro@usuario.com" autofocus
                            class="appearance-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
                            placeholder="Email">
                 </div>
-                <div>
+                <div class="relative">
                     <label for="usuario-password" class="sr-only">Senha</label>
-                    <input id="usuario-password" name="password" type="password" required 
-                           class="appearance-none rounded-b-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                    <input id="usuario-password" name="password" type="password" required value="password"
+                           class="appearance-none rounded-b-md relative block w-full pr-12 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
                            placeholder="Senha">
+                    <button type="button" onclick="togglePassword('usuario-password','toggle-usuario')" id="toggle-usuario"
+                        class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none">
+                        👁️
+                    </button>
                 </div>
             </div>
 
@@ -56,15 +60,19 @@
             <div class="rounded-md shadow-sm -space-y-px">
                 <div>
                     <label for="facilitador-email" class="sr-only">Email</label>
-                    <input id="facilitador-email" name="email" type="email" 
+                    <input id="facilitador-email" name="email" type="email" value="joao@facilitador.com"
                            class="appearance-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
                            placeholder="Email">
                 </div>
-                <div>
+                <div class="relative">
                     <label for="facilitador-password" class="sr-only">Senha</label>
-                    <input id="facilitador-password" name="password" type="password" 
-                           class="appearance-none rounded-b-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                    <input id="facilitador-password" name="password" type="password" value="password"
+                           class="appearance-none rounded-b-md relative block w-full pr-12 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
                            placeholder="Senha">
+                    <button type="button" onclick="togglePassword('facilitador-password','toggle-facilitador')" id="toggle-facilitador"
+                        class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none">
+                        👁️
+                    </button>
                 </div>
             </div>
 
@@ -108,6 +116,19 @@ function showTab(type) {
         usuarioTab.classList.add('border-transparent', 'text-gray-500');
         facilitadorForm.classList.remove('hidden');
         usuarioForm.classList.add('hidden');
+    }
+}
+
+function togglePassword(inputId, btnId) {
+    const input = document.getElementById(inputId);
+    const btn = document.getElementById(btnId);
+    if (!input) return;
+    if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+    } else {
+        input.type = 'password';
+        btn.textContent = '👁️';
     }
 }
 </script>

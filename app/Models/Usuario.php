@@ -34,9 +34,15 @@ class Usuario extends Authenticatable
         return $this->belongsTo(Facilitador::class);
     }
 
-    // Relacionamento: Um usuário tem muitas notas fiscais
+    // Relacionamento: Um usuário tem muitos cupons fiscais
+    public function cuponsFiscais()
+    {
+        return $this->hasMany(CupomFiscal::class);
+    }
+
+    // Alias para compatibilidade
     public function notasFiscais()
     {
-        return $this->hasMany(NotaFiscal::class);
+        return $this->cuponsFiscais();
     }
 }

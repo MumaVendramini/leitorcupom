@@ -21,6 +21,11 @@
                 <p id="status-message" class="text-sm"></p>
             </div>
 
+            <div id="raw-container" class="mb-4 hidden">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo lido do QR</label>
+                <textarea id="raw-text" rows="3" class="w-full text-xs p-2 border border-gray-300 rounded-md" readonly></textarea>
+            </div>
+
             <!-- Formulário manual (caso o scan não funcione) -->
             <div class="border-t pt-6 mt-6">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Ou digite a chave manualmente</h3>
@@ -61,6 +66,32 @@
 <script>
 let html5QrCode;
 let scanHistory = [];
+let lastRawText = null;
+
+// Haptics (vibração) com fallback para beep
+function haptic(pattern = [90]) {
+    try {
+        if (navigator.vibrate) {
+            navigator.vibrate(pattern);
+            return;
+        }
+    } catch (e) { /* ignore */ }
+    // Fallback: beep curto
+    try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.type = 'square';
+        o.frequency.value = 880;
+        o.start();
+        g.gain.setValueAtTime(0.2, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.12);
+        setTimeout(() => { try { o.stop(); ctx.close(); } catch(e){} }, 160);
+    } catch (e) { /* ignore */ }
+}
 
 // Inicializar o scanner
 function initScanner() {
@@ -86,6 +117,12 @@ function initScanner() {
 // Callback quando QR Code é lido com sucesso
 function onScanSuccess(decodedText, decodedResult) {
     console.log('QR Code detectado:', decodedText);
+    lastRawText = decodedText;
+    const rawEl = document.getElementById('raw-text');
+    const rawContainer = document.getElementById('raw-container');
+    rawEl.value = decodedText;
+    rawContainer.classList.remove('hidden');
+    haptic([60]);
     
     // Extrair chave de acesso do QR Code
     // O QR Code da NF-e geralmente contém a URL ou apenas a chave
@@ -93,7 +130,7 @@ function onScanSuccess(decodedText, decodedResult) {
     
     if (chaveAcesso) {
         html5QrCode.pause();
-        submitNota(chaveAcesso);
+        submitNota(chaveAcesso, decodedText);
     } else {
         showStatus('error', 'QR Code inválido. Não foi possível extrair a chave de acesso.');
     }
@@ -127,7 +164,7 @@ function extractChaveAcesso(text) {
 }
 
 // Submeter nota ao backend
-async function submitNota(chaveAcesso) {
+async function submitNota(chaveAcesso, rawText=null) {
     showStatus('info', 'Registrando cupom fiscal...');
     
     try {
@@ -136,19 +173,26 @@ async function submitNota(chaveAcesso) {
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'X-Requested-With': 'XMLHttpRequest',
                 'Accept': 'application/json'
             },
-            credentials: 'same-origin',
+            credentials: 'include',
             body: JSON.stringify({
-                chave_acesso: chaveAcesso
+                chave_acesso: chaveAcesso,
+                qr_conteudo: rawText
             })
         });
+        const text = await response.text();
+        let data;
+        try { data = JSON.parse(text); } catch(e) { data = { success: false, message: text || 'Resposta não é JSON' }; }
 
-        const data = await response.json();
+        console.log('POST /api/notas status:', response.status);
+        console.log('POST /api/notas body:', data);
 
         if (response.ok && data.success) {
             showStatus('success', 'Cupom registrado com sucesso! ✓');
-            addToHistory(data.nota);
+            haptic([50, 30, 50]);
+            addToHistory(data.cupom);
             
             // Limpar campo manual se tiver
             document.getElementById('chave_manual').value = '';
@@ -162,6 +206,7 @@ async function submitNota(chaveAcesso) {
             }, 2000);
         } else {
             showStatus('error', data.message || 'Erro ao registrar cupom.');
+            haptic([100]);
             setTimeout(() => {
                 if (html5QrCode) {
                     html5QrCode.resume();
@@ -169,8 +214,9 @@ async function submitNota(chaveAcesso) {
             }, 3000);
         }
     } catch (error) {
-        console.error('Erro:', error);
+    console.error('Erro na requisição /api/notas:', error);
         showStatus('error', 'Erro de conexão. Tente novamente.');
+        haptic([120]);
         setTimeout(() => {
             if (html5QrCode) {
                 html5QrCode.resume();
@@ -190,7 +236,7 @@ function submitManual(event) {
         return;
     }
     
-    submitNota(chave);
+    submitNota(chave, lastRawText || chave);
 }
 
 // Mostrar status
@@ -217,8 +263,8 @@ function hideStatus() {
 }
 
 // Adicionar ao histórico da sessão
-function addToHistory(nota) {
-    scanHistory.push(nota);
+function addToHistory(cupom) {
+    scanHistory.push(cupom);
     
     const historyDiv = document.getElementById('scan-history');
     const historyList = document.getElementById('history-list');
@@ -226,9 +272,9 @@ function addToHistory(nota) {
     const item = document.createElement('div');
     item.className = 'bg-green-50 border border-green-200 rounded-md p-4';
     item.innerHTML = `
-        <p class="font-medium text-green-900">Cupom #${nota.numero_nf}</p>
-        <p class="text-sm text-green-700">CNPJ: ${nota.cnpj}</p>
-        <p class="text-sm text-green-700">Valor: R$ ${nota.valor}</p>
+        <p class="font-medium text-green-900">Cupom #${cupom.numero_nf}</p>
+        <p class="text-sm text-green-700">CNPJ: ${cupom.cnpj}</p>
+        <p class="text-sm text-green-700">Valor: R$ ${cupom.valor}</p>
     `;
     
     historyList.prepend(item);

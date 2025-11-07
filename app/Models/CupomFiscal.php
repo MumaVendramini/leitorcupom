@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NotaFiscal extends Model
+class CupomFiscal extends Model
 {
     use HasFactory;
+
+    protected $table = 'cupons_fiscais';
 
     protected $fillable = [
         'usuario_id',
@@ -15,13 +17,16 @@ class NotaFiscal extends Model
         'cnpj',
         'data_emissao',
         'valor',
-        'cidade',
+        'uf',
         'ano',
         'mes',
         'modelo',
         'numero_nf',
+        'codigo_num',
+        'dv',
         'serie',
         'sat',
+        'qr_conteudo',
     ];
 
     protected $casts = [
@@ -29,7 +34,7 @@ class NotaFiscal extends Model
         'valor' => 'decimal:2',
     ];
 
-    // Relacionamento: Uma nota fiscal pertence a um usuário
+    // Relacionamento: Um cupom fiscal pertence a um usuário
     public function usuario()
     {
         return $this->belongsTo(Usuario::class);

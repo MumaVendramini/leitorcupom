@@ -35,8 +35,15 @@ class Facilitador extends Authenticatable
     }
 
     // Pegar todas as notas dos usuários indicados por este facilitador
+    // Cupons fiscais (novo nome) através dos usuários
+    public function cuponsFiscais()
+    {
+        return $this->hasManyThrough(CupomFiscal::class, Usuario::class);
+    }
+
+    // Alias legado para compatibilidade se algo ainda chamar notasFiscais()
     public function notasFiscais()
     {
-        return $this->hasManyThrough(NotaFiscal::class, Usuario::class);
+        return $this->cuponsFiscais();
     }
 }
