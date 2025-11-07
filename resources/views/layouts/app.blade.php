@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="content-language" content="pt-br">
+    <meta name="language" content="Portuguese">
+    <meta name="google" content="notranslate">
     <title>@yield('title', 'Leitor de Cupom Fiscal')</title>
     
     <!-- Tailwind CSS -->
@@ -24,18 +27,29 @@
                     </div>
                 </div>
                 
-                <div class="flex items-center">
+                <div class="flex items-center gap-3">
                     @auth
-                        <span class="text-gray-700 mr-4">Olá, {{ Auth::user()->nome }}</span>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                                Sair
+                        <div class="relative" id="perfil-dropdown">
+                            <button class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition" onclick="toggleDropdown()">
+                                Perfil
                             </button>
-                        </form>
+                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden" id="dropdown-menu">
+                                <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-t-lg">
+                                    Ver Perfil
+                                </a>
+                                <form method="POST" action="{{ route('logout') }}" class="block">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded-b-lg">
+                                        Sair
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     @else
-                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 px-3 py-2">Login</a>
-                        <a href="{{ route('register') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-2">
+                        <a href="{{ route('login') }}" class="px-4 py-2 rounded font-semibold transition @if(Route::currentRouteName() === 'login') bg-blue-600 text-white @else bg-white text-blue-600 hover:bg-gray-100 @endif">
+                            Login
+                        </a>
+                        <a href="{{ route('register') }}" class="px-4 py-2 rounded font-semibold transition @if(Route::currentRouteName() === 'register') bg-blue-600 text-white @else bg-white text-blue-600 hover:bg-gray-100 @endif">
                             Cadastrar
                         </a>
                     @endauth
@@ -62,5 +76,19 @@
     </main>
 
     @stack('scripts')
+    
+    <script>
+        function toggleDropdown() {
+            const menu = document.getElementById('dropdown-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('perfil-dropdown');
+            if (dropdown && !dropdown.contains(event.target)) {
+                document.getElementById('dropdown-menu').classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>

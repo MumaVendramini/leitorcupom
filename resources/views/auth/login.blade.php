@@ -3,7 +3,7 @@
 @section('title', 'Login')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center">
+<div class="min-h-screen flex items-center justify-center px-4">
     <div class="max-w-md w-full space-y-8">
         <div>
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -24,17 +24,17 @@
         <!-- Form Login Usuário -->
         <form id="form-usuario" class="mt-8 space-y-6" method="POST" action="{{ route('login.usuario') }}">
             @csrf
-            <div class="rounded-md shadow-sm -space-y-px">
+            <div class="space-y-4">
                 <div>
                     <label for="usuario-email" class="sr-only">Email</label>
                     <input id="usuario-email" name="email" type="email" required value="pedro@usuario.com" autofocus
-                           class="appearance-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                            placeholder="Email">
                 </div>
                 <div class="relative">
                     <label for="usuario-password" class="sr-only">Senha</label>
                     <input id="usuario-password" name="password" type="password" required value="password"
-                           class="appearance-none rounded-b-md relative block w-full pr-12 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                           class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                            placeholder="Senha">
                     <button type="button" onclick="togglePassword('usuario-password','toggle-usuario')" id="toggle-usuario"
                         class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none">
@@ -57,17 +57,17 @@
         <!-- Form Login Facilitador -->
         <form id="form-facilitador" class="mt-8 space-y-6 hidden" method="POST" action="{{ route('login.facilitador') }}">
             @csrf
-            <div class="rounded-md shadow-sm -space-y-px">
+            <div class="space-y-4">
                 <div>
                     <label for="facilitador-email" class="sr-only">Email</label>
                     <input id="facilitador-email" name="email" type="email" value="joao@facilitador.com"
-                           class="appearance-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                            placeholder="Email">
                 </div>
                 <div class="relative">
                     <label for="facilitador-password" class="sr-only">Senha</label>
                     <input id="facilitador-password" name="password" type="password" value="password"
-                           class="appearance-none rounded-b-md relative block w-full pr-12 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                           class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                            placeholder="Senha">
                     <button type="button" onclick="togglePassword('facilitador-password','toggle-facilitador')" id="toggle-facilitador"
                         class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none">
