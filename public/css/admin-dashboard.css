@@ -1,0 +1,324 @@
+/* ============================================ */
+/* Admin Dashboard Styles */
+/* ============================================ */
+
+/* Desktop Styles (mantém como está usando Tailwind) */
+/* O Tailwind já está sendo usado via CDN no layout principal */
+
+/* Custom Styles para melhorar o dashboard */
+.dashboard-card {
+    transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+}
+
+.stats-card {
+    min-height: 140px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================ */
+/* Mobile Styles (768px e menor) */
+/* ============================================ */
+@media (max-width: 768px) {
+    /* Container Principal */
+    .min-h-screen {
+        padding: 1.5rem !important;
+    }
+
+    .container {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .py-8 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* Header Admin */
+    .mb-8 h1 {
+        font-size: 1.5rem !important;
+    }
+
+    .mb-8 p {
+        font-size: 0.875rem !important;
+    }
+
+    /* Cards de Estatísticas - 2 por linha no mobile */
+    .container .stats-container,
+    .container .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+
+    .stats-card {
+        min-height: auto !important;
+        padding: 1rem !important;
+    }
+
+    .stats-card .text-3xl {
+        font-size: 1.5rem !important;
+    }
+
+    .stats-card .text-sm {
+        font-size: 0.75rem !important;
+    }
+
+    .stats-card .text-xs {
+        font-size: 0.65rem !important;
+    }
+
+    /* Navegação Admin - 2 por linha */
+    .container .admin-navigation,
+    .container .grid.grid-cols-1.md\:grid-cols-4 {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+
+    .admin-navigation a,
+    .grid.grid-cols-1.md\:grid-cols-4 a {
+        padding: 1rem !important;
+    }
+
+    .admin-navigation .text-2xl,
+    .grid.grid-cols-1.md\:grid-cols-4 .text-2xl {
+        font-size: 1.5rem !important;
+    }
+
+    .admin-navigation .font-semibold,
+    .grid.grid-cols-1.md\:grid-cols-4 .font-semibold {
+        font-size: 0.875rem !important;
+    }
+
+    .admin-navigation .text-sm,
+    .grid.grid-cols-1.md\:grid-cols-4 .text-sm {
+        font-size: 0.75rem !important;
+    }
+
+    /* Super Admin Link - Ocupa 2 colunas */
+    .md\:col-span-4 {
+        grid-column: span 2 !important;
+    }
+
+    /* Content Box */
+    .bg-white.rounded-lg.shadow-lg {
+        border-radius: 0.5rem !important;
+        padding: 1rem !important;
+    }
+
+    /* Tabela */
+    .overflow-x-auto {
+        margin: 0 -1rem;
+        padding: 0 1rem;
+    }
+
+    .overflow-x-auto table {
+        font-size: 0.75rem !important;
+    }
+
+    .overflow-x-auto th,
+    .overflow-x-auto td {
+        padding: 0.5rem 0.75rem !important;
+        white-space: nowrap;
+    }
+
+    .overflow-x-auto th {
+        font-size: 0.625rem !important;
+    }
+
+    /* Badges na tabela */
+    .overflow-x-auto .inline-flex {
+        font-size: 0.625rem !important;
+        padding: 0.25rem 0.5rem !important;
+    }
+
+    /* Títulos */
+    h2.text-2xl {
+        font-size: 1.25rem !important;
+    }
+
+    h3.text-lg {
+        font-size: 1rem !important;
+    }
+
+    /* Mensagens de erro/sucesso */
+    .mb-4.p-4 {
+        padding: 0.75rem !important;
+        font-size: 0.875rem !important;
+        margin: 0 0 1rem 0 !important;
+    }
+
+    /* Texto "Nenhum cupom" */
+    .text-center.text-gray-500.py-8 {
+        padding: 2rem 1rem !important;
+        font-size: 0.875rem !important;
+    }
+}
+
+/* Mobile Small (480px e menor) */
+@media (max-width: 480px) {
+    /* Padding nas bordas para telas pequenas */
+    .min-h-screen {
+        padding: 1rem !important;
+    }
+
+    /* Cards de estatísticas ainda menores */
+    .stats-card {
+        padding: 0.875rem !important;
+    }
+
+    .stats-card .text-3xl {
+        font-size: 1.25rem !important;
+    }
+
+    /* Mantém navegação em 2 colunas mesmo em telas pequenas */
+    .container .admin-navigation,
+    .container .grid.grid-cols-1.md\:grid-cols-4,
+    .container .stats-container,
+    .container .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem !important;
+    }
+
+    .admin-navigation a,
+    .grid.grid-cols-1.md\:grid-cols-4 a {
+        padding: 0.875rem !important;
+    }
+
+    /* Super Admin Link - Ocupa 2 colunas */
+    .md\:col-span-4 {
+        grid-column: span 2 !important;
+    }
+
+    /* Tabela mais compacta */
+    .overflow-x-auto th,
+    .overflow-x-auto td {
+        padding: 0.375rem 0.5rem !important;
+    }
+
+    /* Header */
+    .mb-8 h1 {
+        font-size: 1.25rem !important;
+    }
+}
+
+/* ============================================ */
+/* Landscape Mobile (altura menor) */
+/* ============================================ */
+@media (max-height: 600px) and (orientation: landscape) {
+    .py-8 {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    .mb-8 {
+        margin-bottom: 1rem !important;
+    }
+
+    .stats-card {
+        padding: 0.75rem !important;
+    }
+
+    .stats-card .text-3xl {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* ============================================ */
+/* Melhorias de Usabilidade Mobile */
+/* ============================================ */
+@media (max-width: 768px) {
+    /* Links e botões maiores para touch */
+    a, button {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Scroll suave */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Evitar zoom em inputs em iOS */
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+
+    /* Tabela com scroll horizontal suave */
+    .table-responsive {
+        scrollbar-width: thin;
+        scrollbar-color: #cbd5e0 #f7fafc;
+    }
+
+    .table-responsive::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+        background: #f7fafc;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #cbd5e0;
+        border-radius: 3px;
+    }
+}
+
+/* ============================================ */
+/* Desktop - Garante que não seja afetado */
+/* ============================================ */
+@media screen and (min-width: 769px) {
+    /* Mantém o layout padrão do Tailwind no desktop */
+    .admin-navigation,
+    .stats-container {
+        display: grid;
+    }
+    
+    /* Navegação: 4 colunas no desktop */
+    .admin-navigation {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Estatísticas: 4 colunas no desktop */
+    .stats-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ============================================ */
+/* FORÇA 2 COLUNAS NO MOBILE - Prioridade Máxima */
+/* ============================================ */
+@media screen and (max-width: 768px) {
+    /* Força grid de 2 colunas para navegação admin */
+    body .container .admin-navigation,
+    body .min-h-screen .container .grid.mb-8,
+    body div.container div.grid.grid-cols-1.md\:grid-cols-4.gap-4.mb-8 {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+    }
+
+    /* Força grid de 2 colunas para estatísticas */
+    body .stats-container,
+    body div.grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4.gap-4.mb-8.stats-container,
+    body div.container div.grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+    }
+}

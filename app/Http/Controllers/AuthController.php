@@ -98,10 +98,45 @@ class AuthController extends Controller
         return redirect()->back()->with('success', 'Facilitador criado com sucesso! Código: ' . $facilitador->codigo_indicacao);
     }
 
+    // Login de Admin (User model)
+    public function loginAdmin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard('admin')->attempt($credentials)) {
+            $request->session()->regenerate();
+            
+            $user = Auth::guard('admin')->user();
+            
+            // Verificar se tem permissão de admin
+            if ($user->role === 'admin' || $user->role === 'super_admin') {
+                return redirect()->intended('/admin/dashboard');
+            }
+            
+            // Se não for admin, faz logout
+            Auth::guard('admin')->logout();
+            return back()->withErrors([
+                'email' => 'Você não tem permissão de administrador.',
+            ]);
+        }
+
+        return back()->withErrors([
+            'email' => 'Credenciais inválidas.',
+        ]);
+    }
+
     // Logout
     public function logout(Request $request)
     {
         // Logout seguro para múltiplos guards
+        if (Auth::guard('admin')->check()) {
+            Auth::guard('admin')->logout();
+        }
         if (Auth::guard('facilitador')->check()) {
             Auth::guard('facilitador')->logout();
         }

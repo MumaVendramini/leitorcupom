@@ -84,12 +84,19 @@
         </form>
 
         <div class="text-center">
-            <p class="text-sm text-gray-600">
-                Não tem uma conta? 
-                <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-500">
-                    Cadastre-se
-                </a>
-            </p>
+            <div class="space-y-2">
+                <p class="text-sm text-gray-600">
+                    Não tem uma conta? 
+                    <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-500">
+                        Cadastre-se
+                    </a>
+                </p>
+                <p class="text-xs text-gray-500 pt-2 border-t">
+                    <a href="{{ route('admin.login') }}" class="font-medium text-purple-600 hover:text-purple-500">
+                        🔒 Acesso Administrativo
+                    </a>
+                </p>
+            </div>
         </div>
     </div>
 </div>

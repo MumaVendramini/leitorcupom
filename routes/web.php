@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\FacilitadorController;
 use App\Http\Controllers\CupomFiscalController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,13 @@ Route::get('/login', function () {
 
 Route::post('/login/usuario', [AuthController::class, 'loginUsuario'])->name('login.usuario');
 Route::post('/login/facilitador', [AuthController::class, 'loginFacilitador'])->name('login.facilitador');
+
+// Login de Admin
+Route::get('/admin/login', function () {
+    return view('auth.admin-login');
+})->name('admin.login');
+
+Route::post('/admin/login', [AuthController::class, 'loginAdmin'])->name('admin.login.post');
 
 Route::get('/register', function () {
     return view('auth.register');
@@ -63,6 +71,28 @@ if (app()->environment('local')) {
         request()->session()->regenerate();
         return redirect('/dashboard');
     });
+    
+    // Login direto como Super Admin (para testes)
+    Route::get('/debug/login-super-admin', function () {
+        $user = \App\Models\User::where('email','super@admin.com')->first();
+        if (!$user) {
+            return 'Super Admin não encontrado. Execute: php artisan db:seed --class=SuperAdminSeeder';
+        }
+        \Illuminate\Support\Facades\Auth::guard('admin')->login($user);
+        request()->session()->regenerate();
+        return redirect('/admin/dashboard');
+    });
+    
+    // Login direto como Admin (para testes)
+    Route::get('/debug/login-admin', function () {
+        $user = \App\Models\User::where('email','admin@admin.com')->first();
+        if (!$user) {
+            return 'Admin não encontrado. Execute: php artisan db:seed --class=SuperAdminSeeder';
+        }
+        \Illuminate\Support\Facades\Auth::guard('admin')->login($user);
+        request()->session()->regenerate();
+        return redirect('/admin/dashboard');
+    });
 }
 
 // Rotas do Facilitador (autenticadas)
@@ -71,8 +101,27 @@ Route::middleware(['auth:facilitador'])->prefix('facilitador')->group(function (
     Route::get('/relatorio', [FacilitadorController::class, 'relatorio'])->name('facilitador.relatorio');
 });
 
-// Rotas Admin (proteção simples por enquanto - só facilitador ativo)
-Route::middleware(['auth:facilitador'])->prefix('admin')->group(function () {
-    Route::get('/facilitadores', [FacilitadorController::class, 'index'])->name('admin.facilitadores.index');
-    Route::get('/facilitadores/{id}', [FacilitadorController::class, 'show'])->name('admin.facilitadores.show');
+// Rotas Admin (Gerenciamento completo - roles admin/super_admin)
+Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard
+    Route::get('/', [AdminController::class, 'dashboard'])->name('index');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    
+    // Facilitadores
+    Route::get('/facilitadores', [AdminController::class, 'index'])->name('facilitadores.index');
+    Route::get('/facilitadores/criar', [AdminController::class, 'criarFacilitador'])->name('facilitadores.create');
+    Route::post('/facilitadores', [AdminController::class, 'store'])->name('facilitadores.store');
+    Route::get('/facilitadores/{facilitador}/editar', [AdminController::class, 'edit'])->name('facilitadores.edit');
+    Route::put('/facilitadores/{facilitador}', [AdminController::class, 'update'])->name('facilitadores.update');
+    Route::delete('/facilitadores/{facilitador}', [AdminController::class, 'destroy'])->name('facilitadores.destroy');
+    Route::post('/facilitadores/{facilitador}/gerar-codigo', [AdminController::class, 'gerarCodigo'])->name('gerar-codigo');
+    
+    // Relatórios
+    Route::get('/relatorios/facilitador', [AdminController::class, 'relatorioFacilitador'])->name('relatorio-facilitador');
+    Route::get('/relatorios/mensal', [AdminController::class, 'relatorioMensal'])->name('relatorio-mensal');
+    
+    // Super Admin (Desenvolvedor)
+    Route::middleware('super_admin')->group(function () {
+        Route::get('/super', [AdminController::class, 'superAdminDashboard'])->name('super');
+    });
 });
