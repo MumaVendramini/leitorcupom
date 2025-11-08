@@ -15,6 +15,10 @@ class Facilitador extends Authenticatable
         'nome',
         'email',
         'password',
+        'telefone',
+        'cpf',
+        'cidade',
+        'estado',
         'codigo_indicacao',
         'ativo',
     ];

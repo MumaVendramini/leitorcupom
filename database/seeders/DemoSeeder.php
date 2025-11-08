@@ -17,46 +17,56 @@ class DemoSeeder extends Seeder
     public function run()
     {
         // Criar Facilitadores
-        $facilitador1 = Facilitador::create([
-            'nome' => 'João Silva',
-            'email' => 'joao@facilitador.com',
-            'password' => Hash::make('password'),
-            'codigo_indicacao' => 'JOAO2025',
-        ]);
+        $facilitador1 = Facilitador::firstOrCreate(
+            ['email' => 'joao@facilitador.com'],
+            [
+                'nome' => 'João Silva',
+                'password' => Hash::make('password'),
+                'codigo_indicacao' => 'JOAO2025',
+            ]
+        );
 
-        $facilitador2 = Facilitador::create([
-            'nome' => 'Maria Santos',
-            'email' => 'maria@facilitador.com',
-            'password' => Hash::make('password'),
-            'codigo_indicacao' => 'MARIA2025',
-        ]);
+        $facilitador2 = Facilitador::firstOrCreate(
+            ['email' => 'maria@facilitador.com'],
+            [
+                'nome' => 'Maria Santos',
+                'password' => Hash::make('password'),
+                'codigo_indicacao' => 'MARIA2025',
+            ]
+        );
 
         echo "✓ Facilitadores criados\n";
         echo "  - joao@facilitador.com (senha: password) - Código: JOAO2025\n";
         echo "  - maria@facilitador.com (senha: password) - Código: MARIA2025\n\n";
 
         // Criar Usuários para o Facilitador 1
-        $usuario1 = Usuario::create([
-            'nome' => 'Pedro Oliveira',
-            'email' => 'pedro@usuario.com',
-            'password' => Hash::make('password'),
-            'facilitador_id' => $facilitador1->id,
-        ]);
+        $usuario1 = Usuario::firstOrCreate(
+            ['email' => 'pedro@usuario.com'],
+            [
+                'nome' => 'Pedro Oliveira',
+                'password' => Hash::make('password'),
+                'facilitador_id' => $facilitador1->id,
+            ]
+        );
 
-        $usuario2 = Usuario::create([
-            'nome' => 'Ana Costa',
-            'email' => 'ana@usuario.com',
-            'password' => Hash::make('password'),
-            'facilitador_id' => $facilitador1->id,
-        ]);
+        $usuario2 = Usuario::firstOrCreate(
+            ['email' => 'ana@usuario.com'],
+            [
+                'nome' => 'Ana Costa',
+                'password' => Hash::make('password'),
+                'facilitador_id' => $facilitador1->id,
+            ]
+        );
 
         // Criar Usuário para o Facilitador 2
-        $usuario3 = Usuario::create([
-            'nome' => 'Carlos Mendes',
-            'email' => 'carlos@usuario.com',
-            'password' => Hash::make('password'),
-            'facilitador_id' => $facilitador2->id,
-        ]);
+        $usuario3 = Usuario::firstOrCreate(
+            ['email' => 'carlos@usuario.com'],
+            [
+                'nome' => 'Carlos Mendes',
+                'password' => Hash::make('password'),
+                'facilitador_id' => $facilitador2->id,
+            ]
+        );
 
         echo "✓ Usuários criados\n";
         echo "  - pedro@usuario.com (senha: password)\n";
@@ -136,7 +146,10 @@ class DemoSeeder extends Seeder
         ];
 
         foreach ($cuponsData as $cupomData) {
-            CupomFiscal::create($cupomData);
+            CupomFiscal::firstOrCreate(
+                ['chave_acesso' => $cupomData['chave_acesso']],
+                $cupomData
+            );
         }
 
         echo "✓ Cupons fiscais de exemplo criados\n\n";

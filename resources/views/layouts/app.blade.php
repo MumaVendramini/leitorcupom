@@ -12,6 +12,9 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Admin Dashboard Styles -->
+    <link rel="stylesheet" href="{{ asset('css/admin-dashboard.css') }}?v={{ time() }}">
+    
     @stack('styles')
 </head>
 <body class="bg-gray-100">
@@ -75,6 +78,9 @@
         @yield('content')
     </main>
 
+    <!-- Admin Dashboard Scripts -->
+    <script src="{{ asset('js/admin-dashboard.js') }}"></script>
+    
     @stack('scripts')
     
     <script>
